@@ -1,13 +1,9 @@
 import './App.css';
-import SquareImage from './Components/Admin_Portal/Square_Image';
-import InfoBlock from './Components/Admin_Portal/Info_block';
+import PageBlock from './Components/Admin_Portal/PageBlock';
 
 function App() {
   return (
-    <span style={{display:"flex",flexDirection:"row"}}>
-      <SquareImage />
-      <InfoBlock/>
-    </span>
+    <PageBlock order={"pic"} picSize={200} />
   );
 }
 

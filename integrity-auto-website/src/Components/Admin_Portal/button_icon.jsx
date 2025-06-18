@@ -9,6 +9,8 @@ function ButtonIcon({btn}){
             return (<ArrowUpTrayIconOutline />)
         case "ArrowUpTrayIconSolid":
             return (<ArrowUpTrayIconSolid />)
+        default:
+            return null
     }
 }
 

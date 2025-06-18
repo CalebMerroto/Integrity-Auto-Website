@@ -1,0 +1,18 @@
+
+:root {
+  --sub-item-padding: 10px;
+}
+
+.pageBlock {
+    display: flex;
+    flex-direction: row;
+}
+.pageItem {
+    padding-left:100px;
+    padding-right:100px;
+}
+.pageSubItem {
+    border: 1px solid #ccc;
+    border-radius: 6px; 
+    padding: var(--sub-item-padding);
+}
