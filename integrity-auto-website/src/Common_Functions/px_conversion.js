@@ -1,7 +1,11 @@
-function to_px(num) {
-    return `${num}px`;
+export function to_px(num) {
+  return `${num}px`;
 }
 
-function from_px(px) {
-    return parseInt(px.replace("px", "") || "0", 10);
+export function from_px(px) {
+  if (typeof px !== "string") {
+    console.warn("from_px called with non-string:", px);
+    return 0;
+  }
+  return parseInt(px.replace("px", ""), 10) || 0;
 }

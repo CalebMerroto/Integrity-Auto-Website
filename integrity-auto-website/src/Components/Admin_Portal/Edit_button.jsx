@@ -1,6 +1,5 @@
 // src/Components/Admin_Portal/Edit_button.jsx
 import ButtonIcon from "./button_icon";
-import "./EditButton.css"
 
 const icons = {
   UploadImage: "ArrowUpTrayIconOutline",

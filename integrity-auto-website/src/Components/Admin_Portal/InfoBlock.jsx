@@ -1,53 +1,66 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import useCSSVar from "../../hooks/useCSSVar";
+import { to_px, from_px } from "../../Common_Functions/px_conversion";
 
-function InfoBlock({w,h}) {
-    const [text, setText] = useState("");
-    const [isEditing, setIsEditing] = useState(false);
-    const textareaRef = useRef(null);
-    const [padding, setPadding] = useCSSVar("sub-item-padding")
+function InfoBlock({ w, h, p = 10 }) {
+  const [text, setText] = useState("");
+  const [isEditing, setIsEditing] = useState(false);
+  const textareaRef = useRef(null);
 
-    function handleFocusOn() {
-        setIsEditing(true);
+  const [padding, setPadding] = useCSSVar("sub-item-padding");
+  const [cw, setCW] = useState(w);
+  const [ch, setCH] = useState(h);
+
+  // Set CSS variable for padding
+  useEffect(() => {
+    setPadding(to_px(p));
+  }, [p, setPadding]);
+
+  // Calculate content width/height based on numeric padding
+  useEffect(() => {
+    const pad = from_px(padding)
+    setCW(w - pad * 2);
+    setCH(h - pad * 2);
+  }, [w, h, padding]);
+
+  function handleFocusOn() {
+    setIsEditing(true);
+  }
+
+  function handleFocusOff(e) {
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+      setIsEditing(false);
     }
+  }
 
-    function handleFocusOff(e) {
-        // Only exit edit mode if blur wasn't from clicking inside the textarea
-        if (!e.currentTarget.contains(e.relatedTarget)) {
-        setIsEditing(false);
-        }
-    }
-    const numericPadding = from_px(padding);
-    const contentWidth = w - numericPadding * 2;
-    const contentHeight = h - numericPadding * 2;
-    return (
+  return (
+    <div onBlur={handleFocusOff} tabIndex={-1} className="pageItem">
+      {isEditing ? (
+        <textarea
+          ref={textareaRef}
+          value={text}
+          autoFocus
+          onChange={(e) => setText(e.target.value)}
+          className="pageSubItem"
+          style={{ width: to_px(cw), height: to_px(ch) }}
+          onFocus={handleFocusOn}
+        />
+      ) : (
         <div
-            onBlur={handleFocusOff}
-            tabIndex={-1}
-            className="pageItem"
+          onClick={() => setIsEditing(true)}
+          style={{
+            cursor: "pointer",
+            minHeight: to_px(ch),
+            maxHeight: to_px(ch),
+          }}
+          className="pageSubItem"
         >
-            {isEditing ? (
-                    <textarea
-                        ref={textareaRef}
-                        value={text}
-                        autoFocus
-                        onChange={(e) => setText(e.target.value)}
-                        className="pageSubItem"
-                        style={{ width: `${contentWidth}px`, height: `${contentHeight}px` }}
-                        onFocus={handleFocusOn}
-                    />
-            ) : (
-                <div 
-                    onClick={() => setIsEditing(true)}
-                    style={{ cursor: "pointer", width: `${contentWidth}px`, height: `${contentHeight}px` }}
-                    className="pageSubItem"
-                >
-                    <ReactMarkdown>{text || "_Click to edit markdown..._"}</ReactMarkdown>
-                </div>
-            )}
+          <ReactMarkdown>{text || "_Click to edit markdown..._"}</ReactMarkdown>
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
 export default InfoBlock;
