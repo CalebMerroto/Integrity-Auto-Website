@@ -1,7 +1,17 @@
 const Base_URL = "http://localhost:3000/";
 
-function fetch_image(id) {
-  return `${Base_URL}${id}`;
+
+
+export async function upload_image(image, name, loc) {
+  await fetch(`${Base_URL}/images/${name}/upload?locs=${loc}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": image.type,
+    },
+    body: image, // File or Blob
+  });
 }
 
-export default fetch_image;
+export async function fetch_image(id) {
+  return `${Base_URL}${id}`;
+}

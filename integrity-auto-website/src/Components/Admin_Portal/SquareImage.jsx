@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import fetch_image from "../../Common/api";
-import EditButton from "./Edit_button"; 
+import { fetch_image } from "../../Common/api";
+// import EditButton from "./Edit_button"; 
 import useCSSVar from "../../hooks/useCSSVar";
 import { to_px } from "../../Common_Functions/px_conversion"
 
