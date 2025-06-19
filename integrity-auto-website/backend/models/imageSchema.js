@@ -1,11 +1,15 @@
-// models/imageSchema.js
-import mongoose from "mongoose";
+// backend/models/imageSchema.js
+const mongoose = require("mongoose");
 
 const imageSchema = new mongoose.Schema({
   uuid: {
     type: String,
     required: true,
     unique: true,
+  },
+  name: {
+    type: String,
+    required: true
   },
   usedIn: {
     type: [String], // Array of UUIDs or component identifiers
@@ -27,4 +31,4 @@ const imageSchema = new mongoose.Schema({
 
 const Image = mongoose.model("Image", imageSchema);
 
-export default Image;
+module.exports = mongoose.model("Image", imageSchema);

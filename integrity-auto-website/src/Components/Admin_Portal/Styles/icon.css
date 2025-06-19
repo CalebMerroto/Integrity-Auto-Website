@@ -1,0 +1,9 @@
+:root {
+    --icon-size: 10px;
+    --icon-padding: 10px;
+}
+.icon_container {
+    width: fit-content; 
+    padding: var(--icon-padding);
+    cursor: pointer;
+}
