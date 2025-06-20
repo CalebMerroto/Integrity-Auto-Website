@@ -1,6 +1,6 @@
 // src/Components/common/FileSizeDisplay.jsx
 import { useEffect, useState } from "react";
-import { check_config } from "../../Common/api";
+import { check_config } from "../../Common_Functions/api";
 
 function formatFileSize(size) {
     // console.log(size)

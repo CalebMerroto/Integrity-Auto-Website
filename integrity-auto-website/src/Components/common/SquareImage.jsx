@@ -1,6 +1,6 @@
 // src/Components/common/SquareImage.jsx
 import { useEffect, useState } from "react";
-import { fetch_image } from "../../Common/api";
+import { fetch_image } from "../../Common_Functions/api";
 import "./Styles/ImageStyling.css"
 import useCSSVar from "../../hooks/useCSSVar";
 

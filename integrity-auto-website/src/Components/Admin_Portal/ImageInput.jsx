@@ -2,8 +2,8 @@
 import { useEffect, useState } from "react";
 import SquareImage from "../common/SquareImage";
 import ImageUploadForm from "./ImageUploadForm";
-import Modal from "../../Common/Modal";
-import { upload_image } from "../../Common/api";
+import Modal from "../common/Modal";
+import { upload_image } from "../../Common_Functions/api";
 
 function ImageInput({ size, uuid }) {
     const [img, setImg] = useState(null);
