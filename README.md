@@ -9,3 +9,4 @@
 - express
 - MongoDB
 - mongoose
+- nodemon
