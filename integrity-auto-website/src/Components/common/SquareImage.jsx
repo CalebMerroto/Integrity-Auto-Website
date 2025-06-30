@@ -3,33 +3,39 @@ import { useEffect, useState } from "react";
 import { fetch_image } from "../../Common_Functions/api";
 import "./Styles/ImageStyling.css"
 import useCSSVar from "../../hooks/useCSSVar";
+import useComponentID from "../../hooks/useComponentID";
 
-function SquareImage({ size = 100, uuid, src = null}) {
-
-  const [image, setImage] = useState("/placeholder_square.png");
-  const [, setCornerRad] = useCSSVar("corner-rad");
-
-
-
+function SquareImage({ size = 100, src = null, imageID = null, parentID = null, setImageId, ikey="comp"}) {
+  const {id} = useComponentID(parentID)
+  const [ image, setImage ] = useState("/placeholder_square.png");
+  const [ , setCornerRad] = useCSSVar("corner-rad");
+  
   useEffect(() => {
+    
+    if (imageID) {
+      setImageId(imageID)
+    } else {
+      setImageId(id)
+    }
+    console.log("image id:",id)
     async function loadImage() {
       if (src) {
         setImage(src)
       }
       else{
         try {
-          const result = await fetch_image(uuid);
-          console.log(`finding image at ${uuid}`)
+          const result = await fetch_image(imageID ?? id, ikey);
+          console.log(`finding image at ${imageID ?? id}`)
           if (result) {
             setImage(result);
           }
           } catch {
-            console.log("could not find image by uuid: ", uuid) 
+            console.log("could not find image by uuid: ", imageID ?? id) 
           }
       }
     }
     loadImage();
-  }, [uuid, setCornerRad, size, src]);
+  }, [id, setCornerRad, size, src, imageID, parentID, setImageId]);
 
   
   const side = `${size}px`;

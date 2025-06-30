@@ -1,8 +1,10 @@
+// src/Components/Admin_Portal/Sub-Components/ImageUploadForm
 import ButtonIcon from "./button_icon";
 import { useEffect, useRef, useState } from "react";
-import useCSSVar from "../../hooks/useCSSVar";
-import { to_px } from "../../Common_Functions/px_conversion";
-import FileSizeDisplay from "../common/FileSizeDisplay";
+import useCSSVar from "../../../hooks/useCSSVar";
+import "../Styles/icon.css"
+import { to_px } from "../../../Common_Functions/px_conversion";
+import FileSizeDisplay from "../../common/FileSizeDisplay";
 
 function UploadBox() {
 
@@ -41,8 +43,9 @@ function ImageUploadForm({scale, pad, img, setImg, onUploadSuccess, setFile, nam
     return (
         <div className="image_upload_form std_border" style={{borderRadius:25}}>
             <div
-                className={img == null ? "icon_container std_border" : "image_preview std_border"}
+                className={img == null ? "icon_container std_border centered-block" : "image_preview std_border centered-block"}
                 onClick={() => fileInputRef.current?.click()}
+                style={{marginRight: "30px"}}
             >
                 <input
                     type="file"
@@ -72,7 +75,7 @@ function ImageUploadForm({scale, pad, img, setImg, onUploadSuccess, setFile, nam
                         </li>
                         <li>
                             <strong>File Size:</strong>{" "}
-                            <FileSizeDisplay size={fileInputRef.current?.files?.[0].size} isValidSize={isValidSize} setIsValidSize={setIsValidSize} />
+                            {fileInputRef.current?.files?.[0].size ?? <FileSizeDisplay size={fileInputRef.current?.files?.[0].size} isValidSize={isValidSize} setIsValidSize={setIsValidSize} />}
                         </li>
                         </ul>
                     </div>

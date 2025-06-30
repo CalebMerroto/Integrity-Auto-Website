@@ -82,7 +82,8 @@ export async function set_config(name, value) {
     return response;
 }
 
-export async function upload_image(file, name, loc) {
+export async function upload_image(file, name, id) {
+    console.log("uploading image at:", name, id)
     if (!file) {
         console.log("Image Required");
         return false;
@@ -98,7 +99,7 @@ export async function upload_image(file, name, loc) {
     const buffer = new Uint8Array(arrayBuffer);   // compatible with express.raw()
 
     const result = await apiCall({
-        url: `/images/${encodeURIComponent(name)}/upload?locs=${encodeURIComponent(loc ?? "")}`,
+        url: `/images/upload/${name}/${id}`,
         req: {
             method: "POST",
             headers: {
@@ -107,7 +108,7 @@ export async function upload_image(file, name, loc) {
             body: buffer, // Now sending raw binary
         },
         messages: {
-            start: `[upload_image] Uploading image "${name}" to location "${loc}"`,
+            start: `[upload_image] Uploading image "${name}"`,
             failed: `[upload_image] Upload failed`,
             success: `[upload_image] Upload successful`,
             error: `[upload_image] Upload error`,
@@ -119,19 +120,175 @@ export async function upload_image(file, name, loc) {
 
 
 
-export async function fetch_image(nameOrUUID) {
-    if (!nameOrUUID) return
+export async function fetch_image(id, key = "comp") {
+    if (!id) return
     return apiCall({
-        url: `/images/${nameOrUUID}`,
+        url: `/images/byKey/${key}/${id}`,
         req: {
             method: "GET",
         },
         messages: {
-            start: `[fetch_image] Fetching image "${nameOrUUID}"`,
+            start: `[fetch_image] Fetching image "${id}"`,
             failed: `[fetch_image] Fetch failed`,
             success: `[fetch_image] Image retrieved`,
             error: `[fetch_image] Error fetching image`,
         },
         returnType: "img"
     });
+}
+
+export async function fetch_image_data(id, key = "comp") {
+    if (!id) return
+    return apiCall({
+        url: `/images/meta/id/${id}`,
+        req: {
+            method: "GET",
+        },
+        messages: {
+            start: `[fetch_image] Fetching image "${id}"`,
+            failed: `[fetch_image] Fetch failed`,
+            success: `[fetch_image] Image retrieved`,
+            error: `[fetch_image] Error fetching image`,
+        }
+    });
+}
+export async function fetchAllImages() {
+    return await apiCall({
+        url: `/images/all/date/asc`
+    })
+    
+}
+
+export async function setText(uuid, text) {
+    if (!uuid || typeof text !== "string") {
+        console.error("[setText] Invalid arguments");
+        return false;
+    }
+
+    let response = await apiCall({
+        url: `/text/${uuid}`,
+        req: {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ text })
+        },
+        messages: {
+            start: `[setText] Trying to update text: ${uuid}`,
+            failed: `[setText] Update failed`,
+            success: `[setText] Text updated:`,
+            error: `[setText] Error updating text:`,
+        }
+    });
+
+    // If update fails, try to create it
+    if (!response) {
+        response = await apiCall({
+            url: `/text/${uuid}`,
+            req: {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ text })
+            },
+            messages: {
+                start: `[setText] Trying to create text: ${uuid}`,
+                failed: `[setText] Creation failed`,
+                success: `[setText] Text created:`,
+                error: `[setText] Error creating text:`,
+            }
+        });
+    }
+
+    return response;
+}
+export async function getText(uuid) {
+    if (!uuid) {
+        console.error("[getText] No UUID provided");
+        return null;
+    }
+
+    return apiCall({
+        url: `/text/${uuid}`,
+        req: {
+            method: "GET",
+        },
+        messages: {
+            start: `[getText] Fetching text for "${uuid}"`,
+            failed: `[getText] Fetch failed`,
+            success: `[getText] Text fetched:`,
+            error: `[getText] Error fetching text`,
+        }
+    });
+}
+export async function getNextId(id) {
+    if (!id) {
+        console.error("[getNextId] no ID provided")
+    }
+    return apiCall({
+        url:`/id/next/${id}`,
+        req:{
+            method: "POST",
+        },
+        messages: {
+            start: `[getNextId] fetching next Id`,
+            failed: `[getNextId] Fetch failed`,
+            success: `[getNextId] id fetched:`,
+            error: `[getNextId] Error fetching next id`
+        }
+    })
+}
+export async function CreateId(id) {
+    if (!id) {
+        console.error("[CreateId] no ID provided", id)
+    }
+    return apiCall({
+        url:`/id/create/${id}`,
+        req:{
+            method: "POST",
+        },
+        messages: {
+            start: `[CreateId] Creating New ID`,
+            failed: `[CreateId] Creation failed`,
+            success: `[CreateId] id created:`,
+            error: `[CreateId] Error creating id`
+        }
+    })
+}
+export async function idExists(id) {
+    if (!id || id === "undefined") {
+        return false;
+    }
+
+    const result = await apiCall({
+        url: `/id/exists/${id}`,
+        req: {
+            method: "GET"
+        },
+        messages: {
+            start: `[idExists] Checking if ID exists`,
+            failed: `[idExists] Could not verify existence`,
+            success: `[idExists] Existence verified:`,
+            error: `[idExists] Error verifying existence`
+        }
+    });
+    // console.log("result", result)
+    // console.log("exists", result?.exists ?? false)
+    // Defensive: result may be null
+    return result?.exists ?? false;
+}
+
+export async function clearIDs() {
+    return apiCall({
+        url:`/id/clear`,
+        method: "POST",
+        messages: {
+            start: `[getNextId] clearing IDs`,
+            failed: `[getNextId] could not clear IDs`,
+            success: `[getText] IDs Cleared:`,
+            error: `[getText] Error clearing IDs`
+        }
+    })
 }

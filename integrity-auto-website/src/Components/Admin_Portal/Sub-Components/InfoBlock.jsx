@@ -1,10 +1,10 @@
-// src/Components/Admin_Portal/Info_Block.jsx
+// src/Components/Admin_Portal/Sub-Components/Info_Block.jsx
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
-import useCSSVar from "../../hooks/useCSSVar";
-import { to_px, from_px } from "../../Common_Functions/px_conversion";
+import useCSSVar from "../../../hooks/useCSSVar";
+import { to_px, from_px } from "../../../Common_Functions/px_conversion";
 
-function InfoBlock({ w, h, p = 10}) {
+function InfoBlock({ w, h, p = 10, }) {
   const [text, setText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef(null);

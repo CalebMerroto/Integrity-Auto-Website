@@ -1,17 +1,20 @@
 // backend/routes/configRoutes.js
-const express = require('express');
-const router = express.Router();
 const config = require('../models/configSchema');
-
-router.get("/:name", async (req, res) => {
-  try {
+async function findConfig(req, res, next) {
     const { name } = req.params;
     const conf = await config.findOne({ key: name });
     if (!conf) return res.status(404).json({ message: `Config "${name}" not found` });
-    res.json({ value: conf.value });
-  } catch (err) {
-    res.status(500).json({ error: "Server error", details: err.message });
-  }
+    req.config = conf
+    next()
+}
+async function setConfig(req, res, next) {
+    req.config.value = req.params.newVal
+    req.config.save()
+    
+}
+
+router.get("/:name", findConfig, async (req, res) => {
+    res.json({ value: req.config.value });
 });
 
 // PUT update config value

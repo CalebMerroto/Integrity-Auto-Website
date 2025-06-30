@@ -2,56 +2,99 @@
 const express = require("express");
 const router = express.Router();
 const Image = require('../models/imageSchema');
-const { v4: uuidv4 } = require('uuid');
+const { ImageUsage, getKey, getImage, validateSorting, getImages, getImageData } = require('../middleware/imageMiddleware');
+const { readID } = require("../middleware/idMiddleware");
+const { v4: uuidv4 } = require("uuid");
 
-router.get('/:name', async (req, res) => {
-  const { name } = req.params;
+router.get('/all/:sortBy/:order', validateSorting, getImages, async (req,res) => {
+    res.json(req.imgs)
+})
+router.get('/meta/:keytype/:key', getKey, getImageData, async (req, res) => {
+  res.json({
+    name:       req.img.name,
+    id:         req.img.uuid,
+    storedMimetype:   req.img.mimetype,
+    uploaded:   req.img.uploadedAt
+  });
+});
 
-  try {
-    // Try to find by name first
-    let img = await Image.findOne({ name });
+router.get('/byKey/:keytype/:key', getKey, getImage, async (req, res) => {
+    res.set('Content-Type', req.img.mimetype);
+    res.set('Content-Length', req.img.data.length);
+    res.send(req.img.data);
+})
+router.delete("/all", async (req, res, next) => {
+  // Delete all Image documents
+  const imgResult = await Image.deleteMany({});
+  
+  // Also delete all ImageUsage documents if you want to clean up references
+  const usageResult = await ImageUsage.deleteMany({});
 
-    // If not found by name, try by uuid
-    if (!img) {
-      img = await Image.findOne({ uuid: name });
-    }
+  res.json({
+    message: "All images and usage records deleted.",
+    imagesDeleted: imgResult.deletedCount,
+    usagesDeleted: usageResult.deletedCount
+  });
+});
+router.post("/usage/:id/:uuid", async (req, res, next) => {
+  const { id, uuid } = req.params;
 
-    if (!img) {
-      return res.status(404).json({ message: `Image "${name}" not found` });
-    }
+  // Either update existing or insert new
+  const result = await ImageUsage.findOneAndUpdate(
+    { locId: id },                         // Query: look for locId match
+    { imgId: uuid },                       // Update: set imgId
+    { upsert: true, new: true }            // Options: create if not exists, return updated doc
+  );
 
-    res.set('Content-Type', img.mimetype);
-    res.set('Content-Length', img.data.length);
-    res.send(img.data); // Sends raw image data, which the browser can display
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Image fetch failed.', details: err.message });
-  }
+  res.json({
+    message: "Usage saved successfully",
+    usage: result
+  });
 });
 
 
+router.post("/upload/:name/:id",readID,express.raw({ type: "image/*", limit: "5mb" }), async (req, res, next) => {
+    const { name, id } = req.params;
+    const uuid = uuidv4(); 
 
-// Image upload route
-router.post('/:name/upload',
-  express.raw({ type: 'image/*', limit: '5mb' }),
-  async (req, res) => {
-    try {
-      const newImage = new Image({
-        uuid: uuidv4(),
-        name: req.params.name,
-        mimetype: req.headers['content-type'],
-        data: Buffer.from(req.body), // <-- important!
-      });
-      await newImage.save();
-      res.status(201).json({ message: 'Image uploaded', uuid: newImage.uuid });
-    } catch (err) {
-      res.status(500).json({ error: `Upload failed: ${err}` });
+    // Check if an image with this UUID already exists
+    const existing = await Image.findOne({ uuid: uuid });
+    if (existing) {
+      return res
+        .status(409)
+        .json({ message: `Image with generated UUID already exists.` });
     }
+
+    // Create the Image document
+    const newImage = new Image({
+      uuid: uuid,
+      name,
+      mimetype: req.headers["content-type"],
+      data: Buffer.from(req.body),
+    });
+
+    // Optionally link the image to a component
+    let usage;
+    if (id) {
+      usage = new ImageUsage({
+        imgId: uuid,
+        locId: id,
+      });
+    }
+
+    // Save both
+    const saveOps = [newImage.save()];
+    if (usage) {
+      saveOps.push(usage.save());
+    }
+    await Promise.all(saveOps);
+
+    res.status(201).json({
+      message: "Image uploaded successfully",
+      uuid: newImage.uuid,
+      linkedComponent: usage ? usage.locId : null,
+    });
   }
 );
-
-
-
-
 
 module.exports = router;

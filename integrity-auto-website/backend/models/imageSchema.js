@@ -11,10 +11,6 @@ const imageSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  usedIn: {
-    type: [String], // Array of UUIDs or component identifiers
-    default: [],
-  },
   mimetype: {
     type: String,
     required: true,

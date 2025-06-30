@@ -1,0 +1,55 @@
+:root {
+    --icon-size: 25px;
+    --icon-padding: 10px;
+}
+.image_upload_form {
+    padding: 25px;
+    display: flex;
+    flex-direction: row;
+    width: fit-content; 
+    background-color: white;
+}
+.image_preview {
+    width: calc(var(--icon-size) + var(--icon-padding) * 2);
+    height: calc(var(--icon-size) + var(--icon-padding) * 2);
+    object-fit: cover; 
+    display: block;
+    cursor: pointer;
+    border-radius: var(--corner-rad);
+}
+
+
+.image_upload_details {
+    padding-left: 25px;
+}
+.image_metadata_container {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
+.image_metadata {
+    background-color: #c0c0c0;
+    border-radius: 6px;
+    list-style:none;
+    margin: 0.5rem 0 0;
+    padding-right: var(--icon-padding);
+    font-size: 0.9rem;
+}
+
+.image_metadata li {
+    margin-bottom: 4px;
+}
+.valid_file_size {
+    color: rgb(0, 213, 0);
+}
+.invalid_file_size {
+    color: red;
+}
+
+.image_input{
+    cursor: pointer;
+    max-width: var(--width);
+    min-width: var(--width);
+    max-height: var(--height);
+    min-height: var(--height);
+} 

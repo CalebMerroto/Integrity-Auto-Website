@@ -1,7 +1,7 @@
 // backend/models/mdSchema.js
 const mongoose = require("mongoose");
 
-const mdSchema = new mongoose.schema({
+const mdSchema = new mongoose.Schema({
     uuid: {
         type: String,
         required: true,
@@ -10,10 +10,6 @@ const mdSchema = new mongoose.schema({
     text: {
         type: String,
         required: true,
-    },
-    location: {
-        type: String,
-        default: null, // Means not currently assigned
     },
 })
 

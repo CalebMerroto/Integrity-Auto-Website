@@ -7,6 +7,8 @@ const mongoose = require("mongoose")
 const cors = require("cors");
 const configRoutes = require("./routes/configRoutes.js"); // Adjust if path differs
 const imageRoutes = require("./routes/images.js"); 
+const textRoutes = require("./routes/textRoutes.js") 
+const idRoutes = require("./routes/idRoutes.js") 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +29,8 @@ app.use(cors({
 
 app.use("/IntegrityAuto/config", configRoutes);
 app.use("/IntegrityAuto/images", imageRoutes);
+app.use("/IntegrityAuto/text", textRoutes);
+app.use("/IntegrityAuto/id", idRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

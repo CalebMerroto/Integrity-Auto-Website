@@ -1,9 +1,30 @@
 :root {
-    --icon-size: 10px;
+    --icon-size: 25px;
     --icon-padding: 10px;
 }
 .icon_container {
-    width: fit-content; 
+    width: 70px; 
+    height: 70px; 
     padding: var(--icon-padding);
     cursor: pointer;
+}
+.icon {
+    width: var(--icon-size);
+    height: var(--icon-size);
+    color: #333333; 
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.icon_container:hover {
+    background-color: #e0e0e0;
+    color: #000000;
+}
+
+.icon_container:active {
+    background-color: #c0c0c0; 
+    color: #000000;
 }
