@@ -1,9 +1,10 @@
 /* src/Components/Admin_Portal/Styles/Home.css */
-.admin-home {
-    text-align: center;
-    background-color: #eee;
-}
-h1 {
+.home {
     background-color: white;
-    padding-bottom: 30px;
+}
+.header {
+    background-color: #ccc;
+    text-align: center;
+    padding: 30px;
+    margin-top: 0px;
 }
