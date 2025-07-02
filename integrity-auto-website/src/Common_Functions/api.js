@@ -118,7 +118,14 @@ export async function upload_image(file, name, id) {
     return !!result;
 }
 
-
+export async function select_image(imageID, componentID) {
+    return await apiCall({
+        url: `/images/usage/${componentID}/${imageID}`,
+        req: {
+            method: "POST"
+        }
+    })
+}
 
 export async function fetch_image(id, key = "comp") {
     if (!id) return

@@ -2,14 +2,14 @@
 
 
 import InfoBlock from './InfoBlock';
-import "../Styles/PageBlock.css"
-import useCSSVar from '../../../hooks/useCSSVar';
-import { to_px } from '../../../Common_Functions/px_conversion';
-import ImageInput from './ImageInput';
-import useComponentID from '../../../hooks/useComponentID';
+import "../../Styles/PageBlock.css"
+import useCSSVar from '../../hooks/useCSSVar';
+import { to_px } from '../../Common_Functions/px_conversion';
+import ImageBlock from './ImageBlock';
+import useComponentID from '../../hooks/useComponentID';
 
 
-function PageBlock({ order, picSize=100, textWidth=400, p=30, image, spacing=10, parentID}) {
+function PageBlock({ order, picSize=100, textWidth=400, p=30, spacing=10, parentID}) {
     const fid = useComponentID(parentID)
     const [, setPadding] = useCSSVar('block-vertical-padding')
     setPadding(to_px(p))
@@ -27,7 +27,7 @@ function PageBlock({ order, picSize=100, textWidth=400, p=30, image, spacing=10,
             }}
             >
                 {order === "pic" ? 
-                    <ImageInput size={picSize} image={image} parentID={fid} /> : 
+                    <ImageBlock size={picSize} parentID={fid} /> : 
                     <InfoBlock w={textWidth} h={picSize * 0.6} parentID={fid} />
                 }
             </div>
@@ -42,7 +42,7 @@ function PageBlock({ order, picSize=100, textWidth=400, p=30, image, spacing=10,
             >
                 {order === "pic" ? 
                     <InfoBlock w={textWidth} h={picSize * 0.6} parentID={fid} /> : 
-                    <ImageInput size={picSize} image={image} parentID={fid} />
+                    <ImageBlock size={picSize} parentID={fid} />
                 }
             </div>
         </div>

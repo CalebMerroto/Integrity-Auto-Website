@@ -6,7 +6,7 @@ import { to_px, from_px } from "../../../Common_Functions/px_conversion";
 import useComponentID from "../../../hooks/useComponentID";
 import { getText, setText } from "../../../Common_Functions/api";
 
-function InfoBlock({ w, h, p = 10, parentID}) {
+function InfoEditBlock({ w, h, p = 10, parentID}) {
   const {id} = useComponentID(parentID)
   const [text, setMdText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
@@ -80,4 +80,4 @@ function InfoBlock({ w, h, p = 10, parentID}) {
   );
 }
 
-export default InfoBlock;
+export default InfoEditBlock;

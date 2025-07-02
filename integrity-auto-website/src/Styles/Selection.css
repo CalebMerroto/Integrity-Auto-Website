@@ -1,0 +1,19 @@
+.selectable-container {
+    display: flex;
+    flex-wrap: wrap; 
+    gap: 1rem;
+}
+
+.selecteable {
+
+}
+
+.selecteable:hover {
+
+}
+
+.selected {
+    border-color: aqua;
+    border-width: 3px;
+    border-style: solid;
+}

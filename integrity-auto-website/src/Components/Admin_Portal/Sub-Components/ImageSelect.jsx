@@ -1,60 +1,56 @@
 import { useEffect, useState } from "react";
-import { fetch_image_data, fetchAllImages } from "../../../Common_Functions/api";
-import SquareImage from "../../common/SquareImage";
+import { fetchAllImages } from "../../../Common_Functions/api";
+import "../Styles/Selection.css"
+import Selectable from "./Selectable";
 
-function ImageIcon({uuid, id, setImageId}){
-    const [meta, setMeta] = useState({name:""})
+
+
+export default function ImageSelect({ id, setImg, onSelect, setName,setImageID }) {
+    const [images, setImages] = useState([]);
+    const [selection, setSelection] = useState(null);
 
     useEffect(() => {
-        async function fetchMeta() {
-            const data = await fetch_image_data(uuid, "id");
-            setMeta(data);
-            // console.log("meta",data)
+        async function getImgs() {
+            const data = await fetchAllImages();
+            setImages(data ?? []);
+            // console.log("Fetched images:", data);
         }
-        fetchMeta();
+        getImgs();
+    }, []);
+    useEffect(()=>{
+        setImg(selection)
+    },[selection, setImg])
 
-    }, [uuid]);
+    useEffect(()=>{
+        function handleKeyDown(e) {
+            if (e.key === "Enter") {
+                onSelect()
+                setImg(selection)
+            }
+        }
+        window.addEventListener("keydown", handleKeyDown);
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    })
+
+    if (images.length === 0) {
+        return <div>Loading images...</div>;
+    }
 
     return (
-        <div>
-            <SquareImage
-                imageID={uuid}
-                parentID={id}
-                setImageId={setImageId}
-                ikey="id"
-            />
-            <span>
-                {meta?.name}
-            </span>
+        <div className="selectable-container">
+            {images.map((img) => (
+                <Selectable 
+                    key={img.uuid}
+                    uuid={img.uuid}
+                    id={id}
+                    selection={selection}
+                    setSelection={setSelection}
+                    size={75}
+                    setName={setName}
+                    setImageID={setImageID}
+                />
+            ))}
         </div>
-    )
+    );
 }
-export default function ImageSelect({ id }) {
-  const [images, setImages] = useState([]);
 
-  useEffect(() => {
-    async function getImgs() {
-      const data = await fetchAllImages();
-      setImages(data ?? []); // always an array
-      console.log("Fetched images:", data);
-    }
-    getImgs();
-  }, []);
-
-  if (images.length === 0) {
-    return <div>Loading images...</div>;
-  }
-
-  return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem" }}>
-      {images.map((img) => (
-        <ImageIcon 
-          key={img.uuid}
-          uuid={img.uuid}
-          id={id}
-          setImageId={() => {}}
-        />
-      ))}
-    </div>
-  );
-}

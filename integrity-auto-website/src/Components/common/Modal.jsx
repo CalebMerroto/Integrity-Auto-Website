@@ -1,14 +1,32 @@
-import ReactDOM from "react-dom";
+import { useEffect } from "react";
 
-function Modal({ children }) {
-  return ReactDOM.createPortal(
-    <div className="modal-backdrop">
-      <div className="modal-content">
+
+
+function Modal({ children, onClose }) {
+  useEffect(() => {
+    function handleKeyDown(e) {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return (
+    <div
+      className="modal-backdrop"
+      onClick={onClose}
+    >
+      <div
+        className="modal-content"
+        onClick={(e) => e.stopPropagation()} // prevent closing when clicking inside
+      >
         {children}
       </div>
-    </div>,
-    document.body
+    </div>
   );
 }
+
 
 export default Modal;

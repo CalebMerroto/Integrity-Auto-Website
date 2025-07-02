@@ -37,20 +37,12 @@ router.delete("/all", async (req, res, next) => {
   });
 });
 router.post("/usage/:id/:uuid", async (req, res, next) => {
-  const { id, uuid } = req.params;
+    const { id, uuid } = req.params;
+    req.id = id
+    req.uuid = uuid
+    next();
 
-  // Either update existing or insert new
-  const result = await ImageUsage.findOneAndUpdate(
-    { locId: id },                         // Query: look for locId match
-    { imgId: uuid },                       // Update: set imgId
-    { upsert: true, new: true }            // Options: create if not exists, return updated doc
-  );
-
-  res.json({
-    message: "Usage saved successfully",
-    usage: result
-  });
-});
+}, useImage);
 
 
 router.post("/upload/:name/:id",readID,express.raw({ type: "image/*", limit: "5mb" }), async (req, res, next) => {

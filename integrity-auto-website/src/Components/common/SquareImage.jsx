@@ -2,19 +2,17 @@
 import { useEffect, useState } from "react";
 import { fetch_image } from "../../Common_Functions/api";
 import "./Styles/ImageStyling.css"
-import useCSSVar from "../../hooks/useCSSVar";
+// import useCSSVar from "../../hooks/useCSSVar";
 import useComponentID from "../../hooks/useComponentID";
 
-function SquareImage({ size = 100, src = null, imageID = null, parentID = null, setImageId, ikey="comp"}) {
+function SquareImage({ size = 100, src = null, imageID = null, parentID = null, setImageId, ikey="comp", cssClass = "std_border"}) {
   const {id} = useComponentID(parentID)
   const [ image, setImage ] = useState("/placeholder_square.png");
-  const [ , setCornerRad] = useCSSVar("corner-rad");
+  // const [ , setCornerRad] = useCSSVar("corner-rad");
   
   useEffect(() => {
     
-    if (imageID) {
-      setImageId(imageID)
-    } else {
+    if (!imageID) {
       setImageId(id)
     }
     // console.log("image id:",id)
@@ -35,13 +33,13 @@ function SquareImage({ size = 100, src = null, imageID = null, parentID = null, 
       }
     }
     loadImage();
-  }, [id, setCornerRad, size, src, imageID, parentID, setImageId, ikey]);
+  }, [id, src, imageID, setImageId, ikey]);
 
   
   const side = `${size}px`;
   return (
     <div 
-      className="image-container std_border"
+      className={`image-container ${cssClass}`}
       style={{ width: side, height: side }}
     >
       

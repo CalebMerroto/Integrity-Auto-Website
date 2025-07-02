@@ -41,7 +41,7 @@ function ImageUploadForm({scale, pad, img, setImg, onUploadSuccess, setFile, nam
 
 
     return (
-        <div className="image_upload_form std_border" style={{borderRadius:25}}>
+        <>
             <div
                 className={img == null ? "icon_container std_border centered-block" : "image_preview std_border centered-block"}
                 onClick={() => fileInputRef.current?.click()}
@@ -88,7 +88,7 @@ function ImageUploadForm({scale, pad, img, setImg, onUploadSuccess, setFile, nam
                 </div>
 
             </div>
-        </div>
+        </>
     );
 }
 

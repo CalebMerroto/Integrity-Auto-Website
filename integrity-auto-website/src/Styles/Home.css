@@ -1,0 +1,9 @@
+/* src/Components/Admin_Portal/Styles/Home.css */
+.admin-home {
+    text-align: center;
+    background-color: #eee;
+}
+h1 {
+    background-color: white;
+    padding-bottom: 30px;
+}

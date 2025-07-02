@@ -76,18 +76,24 @@ async function getImages(req, res, next) {
     next();
 }
 async function useImage(req, res, next) {
-    const usage = new ImageUsage({
-        imgId: req.uuid,
-        locId: req.id,
-    });
-    usage.save()
-    
+  console.log("Using Image", req.uuid);
 
-    res.status(201).json({
-      message: "Image uploaded successfully",
-      uuid: req.uuid,
-      linkedComponent: usage ? usage.locId : null,
-    });
+  const usage = await ImageUsage.findOneAndUpdate(
+    { locId: req.id },
+    { imgId: req.uuid },
+    {
+      upsert: true,
+      new: true,
+      setDefaultsOnInsert: true,
+    }
+  );
+
+  res.status(201).json({
+    message: "Image usage saved successfully",
+    uuid: req.uuid,
+    linkedComponent: usage.locId,
+  });
 }
+
 
 module.exports = { useImage, getKey, getImage, validateSorting, getImages, getImageData }
