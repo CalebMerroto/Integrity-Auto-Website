@@ -4,13 +4,13 @@ const router = express.Router();
 const mdText = require("../models/mdSchema");
 
 
-router.post('/:uuid/:text', async (req, res) => {
-    
-    const { uuid, text } = req.params;
+router.post('/:uuid', async (req, res) => {
+  const { uuid } = req.params;
+  const { text } = req.body;
     console.log("")
     console.log("")
     console.log("")
-    console.log(req.params)
+    console.log("req.body: ",req.body)
     console.log("")
     console.log("")
     console.log("")
@@ -27,6 +27,8 @@ router.post('/:uuid/:text', async (req, res) => {
     );
 
     req.md = updated;
+    res.status(200).json({text: updated?.text ?? ""})
+
 })
 
 

@@ -165,28 +165,33 @@ export async function fetchAllImages() {
     })
     
 }
-
 export async function setText(uuid, text) {
-    if (!uuid || typeof text !== "string") {
-        console.error("[setText] Invalid arguments");
-        return false;
-    }
+  if (!uuid || typeof text !== "string") {
+    console.error("[setText] Invalid arguments");
+    return false;
+  }
 
-    let response = await apiCall({
-        url: `/text/${uuid}/${text}`,
-        req: {
-            method: "POST",
-        },
-        messages: {
-            start: `[setText] Trying to update text: ${uuid}`,
-            failed: `[setText] Update failed`,
-            success: `[setText] Text updated:`,
-            error: `[setText] Error updating text:`,
-        }
-    });
-    console.log("SetText response:", response)
-    return response.text;
+  const response = await apiCall({
+    url: `/text/${uuid}`,
+    req: {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text })
+    },
+    messages: {
+      start: `[setText] Trying to upsert text: ${uuid}`,
+      failed: `[setText] Upsert failed`,
+      success: `[setText] Text upserted:`,
+      error: `[setText] Error upserting text:`
+    }
+  });
+
+  console.log("SetText response:", response);
+  return response?.text;
 }
+
 export async function getText(uuid) {
     if (!uuid) {
         console.error("[getText] No UUID provided");
