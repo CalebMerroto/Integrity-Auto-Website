@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { fetchAllImages } from "../../../Common_Functions/api";
-import "../Styles/Selection.css"
+import "../../../Styles/Selection.css"
 import Selectable from "./Selectable";
 
 

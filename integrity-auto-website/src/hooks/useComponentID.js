@@ -1,8 +1,7 @@
 // src/hooks/useComponentID.js
 import { useMemo } from "react";
-import { getNextId, clearIDs, idExists, CreateId } from "../Common_Functions/api";
+import { idExists, CreateId } from "../Common_Functions/api";
 const idCounters = new Map();          // parentID → nextChildIndex
-const initializedPages = new Set();    // Tracks which pages have been reset
 
 export default function useComponentID({pageName, parentID = null, id = null}) {
   if (!parentID && id) {

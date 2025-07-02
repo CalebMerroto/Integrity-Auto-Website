@@ -2,7 +2,7 @@
 import ButtonIcon from "./button_icon";
 import { useEffect, useRef, useState } from "react";
 import useCSSVar from "../../../hooks/useCSSVar";
-import "../Styles/icon.css"
+import "../../../Styles/icon.css"
 import { to_px } from "../../../Common_Functions/px_conversion";
 import FileSizeDisplay from "../../common/FileSizeDisplay";
 

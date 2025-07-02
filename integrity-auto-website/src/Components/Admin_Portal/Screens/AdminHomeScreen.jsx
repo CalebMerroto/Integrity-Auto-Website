@@ -1,6 +1,6 @@
 // src/Components/Admin_Portal/Screens/AdminHomeScreen
 import PageEditBlock from "../Sub-Components/PageEditBlock"
-import "../Styles/Home.css"
+import "../../../Styles/Home.css"
 
 function AdminHomeScreen(){
     const size = 300

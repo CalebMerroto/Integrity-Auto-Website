@@ -2,7 +2,7 @@
 
 
 import InfoEditBlock from './InfoEditBlock';
-import "../Styles/PageBlock.css"
+import "../../../Styles/PageBlock.css"
 import useCSSVar from '../../../hooks/useCSSVar';
 import { to_px } from '../../../Common_Functions/px_conversion';
 import ImageInput from './ImageInput';

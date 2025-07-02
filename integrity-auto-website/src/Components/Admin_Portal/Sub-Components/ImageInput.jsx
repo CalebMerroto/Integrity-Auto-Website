@@ -5,7 +5,7 @@ import ImageUploadForm from "./ImageUploadForm";
 import Modal from "../../common/Modal";
 import { select_image, upload_image } from "../../../Common_Functions/api";
 import useComponentID from "../../../hooks/useComponentID";
-import "../Styles/ImageUpload.css"
+import "../../../Styles/ImageUpload.css"
 import ImageSelect from "./ImageSelect";
 
 function ImageInput({ size, image, parentID}) {

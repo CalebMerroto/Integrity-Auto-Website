@@ -31,6 +31,16 @@ app.use("/IntegrityAuto/config", configRoutes);
 app.use("/IntegrityAuto/images", imageRoutes);
 app.use("/IntegrityAuto/text", textRoutes);
 app.use("/IntegrityAuto/id", idRoutes);
+// Serve the React app for /IntegrityAuto
+app.get("/IntegrityAuto", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
+
+// Serve the React app for /IntegrityAuto/admin
+app.get("/IntegrityAuto/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "build", "index.html"));
+});
+
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

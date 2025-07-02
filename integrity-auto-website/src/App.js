@@ -1,15 +1,21 @@
 // src/App.js
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import './App.css';
-// import PageBlock from './Components/Admin_Portal/PageBlock';
-// import AdminHomeScreen from "./Components/Admin_Portal/Screens/AdminHomeScreen"
+
+import AdminHomeScreen from "./Components/Admin_Portal/Screens/AdminHomeScreen";
 import Home from './Components/Customer_Portal/Home';
-// import UploadImage from './Components/Admin_Portal/ImageUploadForm';
-// import "./Components/Admin_Portal/Styles/PageBlock.css"
 
 function App() {
   return (
-    <Home />
+    <BrowserRouter basename="/IntegrityAuto">
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/admin" element={<AdminHomeScreen />} />
+        {/* You can add more routes here */}
+      </Routes>
+    </BrowserRouter>
   );
 }
 
 export default App;
+
