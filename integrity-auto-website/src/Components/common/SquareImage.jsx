@@ -17,7 +17,7 @@ function SquareImage({ size = 100, src = null, imageID = null, parentID = null, 
     } else {
       setImageId(id)
     }
-    console.log("image id:",id)
+    // console.log("image id:",id)
     async function loadImage() {
       if (src) {
         setImage(src)
@@ -25,7 +25,7 @@ function SquareImage({ size = 100, src = null, imageID = null, parentID = null, 
       else{
         try {
           const result = await fetch_image(imageID ?? id, ikey);
-          console.log(`finding image at ${imageID ?? id}`)
+          // console.log(`finding image at ${imageID ?? id}`)
           if (result) {
             setImage(result);
           }
@@ -35,7 +35,7 @@ function SquareImage({ size = 100, src = null, imageID = null, parentID = null, 
       }
     }
     loadImage();
-  }, [id, setCornerRad, size, src, imageID, parentID, setImageId]);
+  }, [id, setCornerRad, size, src, imageID, parentID, setImageId, ikey]);
 
   
   const side = `${size}px`;

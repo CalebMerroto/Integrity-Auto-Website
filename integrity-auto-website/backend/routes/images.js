@@ -2,7 +2,7 @@
 const express = require("express");
 const router = express.Router();
 const Image = require('../models/imageSchema');
-const { ImageUsage, getKey, getImage, validateSorting, getImages, getImageData } = require('../middleware/imageMiddleware');
+const { useImage, getKey, getImage, validateSorting, getImages, getImageData } = require('../middleware/imageMiddleware');
 const { readID } = require("../middleware/idMiddleware");
 const { v4: uuidv4 } = require("uuid");
 
@@ -72,29 +72,11 @@ router.post("/upload/:name/:id",readID,express.raw({ type: "image/*", limit: "5m
       mimetype: req.headers["content-type"],
       data: Buffer.from(req.body),
     });
+    newImage.save()
+    req.id = id;
+    req.uuid = uuid;
+    next();
 
-    // Optionally link the image to a component
-    let usage;
-    if (id) {
-      usage = new ImageUsage({
-        imgId: uuid,
-        locId: id,
-      });
-    }
-
-    // Save both
-    const saveOps = [newImage.save()];
-    if (usage) {
-      saveOps.push(usage.save());
-    }
-    await Promise.all(saveOps);
-
-    res.status(201).json({
-      message: "Image uploaded successfully",
-      uuid: newImage.uuid,
-      linkedComponent: usage ? usage.locId : null,
-    });
-  }
-);
+}, useImage);
 
 module.exports = router;

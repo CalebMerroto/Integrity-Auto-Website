@@ -75,6 +75,19 @@ async function getImages(req, res, next) {
     }
     next();
 }
+async function useImage(req, res, next) {
+    const usage = new ImageUsage({
+        imgId: req.uuid,
+        locId: req.id,
+    });
+    usage.save()
+    
 
+    res.status(201).json({
+      message: "Image uploaded successfully",
+      uuid: req.uuid,
+      linkedComponent: usage ? usage.locId : null,
+    });
+}
 
-module.exports = { getKey, getImage, validateSorting, getImages, getImageData }
+module.exports = { useImage, getKey, getImage, validateSorting, getImages, getImageData }

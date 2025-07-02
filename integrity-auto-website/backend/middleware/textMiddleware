@@ -1,0 +1,15 @@
+
+// async function getText(req, res, next) {
+  
+
+//   req.text = doc.text;
+//   req.md = doc;
+//   next();
+// }
+
+// async function editText(req, res, next) {
+//   next();
+// }
+
+
+// module.exports = { getText, editText };

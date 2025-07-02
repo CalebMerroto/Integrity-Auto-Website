@@ -166,13 +166,9 @@ export async function setText(uuid, text) {
     }
 
     let response = await apiCall({
-        url: `/text/${uuid}`,
+        url: `/text/${uuid}/${text}`,
         req: {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ text })
+            method: "POST",
         },
         messages: {
             start: `[setText] Trying to update text: ${uuid}`,
@@ -181,28 +177,8 @@ export async function setText(uuid, text) {
             error: `[setText] Error updating text:`,
         }
     });
-
-    // If update fails, try to create it
-    if (!response) {
-        response = await apiCall({
-            url: `/text/${uuid}`,
-            req: {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({ text })
-            },
-            messages: {
-                start: `[setText] Trying to create text: ${uuid}`,
-                failed: `[setText] Creation failed`,
-                success: `[setText] Text created:`,
-                error: `[setText] Error creating text:`,
-            }
-        });
-    }
-
-    return response;
+    console.log("SetText response:", response)
+    return response.text;
 }
 export async function getText(uuid) {
     if (!uuid) {

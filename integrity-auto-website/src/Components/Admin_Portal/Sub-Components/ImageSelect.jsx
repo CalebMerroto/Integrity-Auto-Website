@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { fetch_image, fetch_image_data, fetchAllImages } from "../../../Common_Functions/api";
+import { fetch_image_data, fetchAllImages } from "../../../Common_Functions/api";
 import SquareImage from "../../common/SquareImage";
 
 function ImageIcon({uuid, id, setImageId}){
@@ -9,7 +9,7 @@ function ImageIcon({uuid, id, setImageId}){
         async function fetchMeta() {
             const data = await fetch_image_data(uuid, "id");
             setMeta(data);
-            console.log("meta",data)
+            // console.log("meta",data)
         }
         fetchMeta();
 

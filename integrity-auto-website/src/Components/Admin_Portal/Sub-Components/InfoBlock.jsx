@@ -3,9 +3,12 @@ import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import useCSSVar from "../../../hooks/useCSSVar";
 import { to_px, from_px } from "../../../Common_Functions/px_conversion";
+import useComponentID from "../../../hooks/useComponentID";
+import { getText, setText } from "../../../Common_Functions/api";
 
-function InfoBlock({ w, h, p = 10, }) {
-  const [text, setText] = useState("");
+function InfoBlock({ w, h, p = 10, parentID}) {
+  const {id} = useComponentID(parentID)
+  const [text, setMdText] = useState("");
   const [isEditing, setIsEditing] = useState(false);
   const textareaRef = useRef(null);
 
@@ -15,8 +18,13 @@ function InfoBlock({ w, h, p = 10, }) {
 
   // Set CSS variable for padding
   useEffect(() => {
+    async function fetchText() {
+      let tempText = await getText(id)
+      setMdText(tempText.text)
+    }
     setPadding(to_px(p));
-  }, [p, setPadding]);
+    fetchText()
+  }, [p, setPadding, setMdText, id]);
 
   // Calculate content width/height based on numeric padding
   useEffect(() => {
@@ -34,8 +42,11 @@ function InfoBlock({ w, h, p = 10, }) {
     if (!e.currentTarget.contains(e.relatedTarget)) {
       setIsEditing(false);
     }
+    if (text && !(text === "")){
+      setText(id, text)
+    }
   }
-
+  // console.log("text:",text)
   return (
     <div 
       onBlur={handleFocusOff} 
@@ -48,7 +59,7 @@ function InfoBlock({ w, h, p = 10, }) {
           ref={textareaRef}
           value={text}
           autoFocus
-          onChange={(e) => setText(e.target.value)}
+          onChange={(e) => setMdText(e.target.value)}
           className=""
           style={{ width: to_px(cw), height: to_px(ch) }}
           onFocus={handleFocusOn}
