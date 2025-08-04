@@ -157,10 +157,6 @@ async function markCompleted(req, res) {
     
     res.status(200).send(`service of vehicle with plate ${license} was completed on ${day}/${month}/${year}`)
 }
-
-const ServiceInfo = require('../models/ServiceSchema');
-const ServicesOnDay = require('../models/ServiceDaySchema');
-
 async function deleteService(req, res) {
     const { date, license } = req;
 

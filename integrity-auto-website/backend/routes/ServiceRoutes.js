@@ -68,3 +68,5 @@ router.put('/override/fullStatus/:date',
         res.status(200).json({ message: "ServiceDay full status overridden to false." });
     }
 );
+
+module.exports = router;

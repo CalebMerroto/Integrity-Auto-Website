@@ -5,7 +5,8 @@ const app = express();
 const PORT = 5000;
 const mongoose = require("mongoose")
 const cors = require("cors");
-const configRoutes = require("./routes/configRoutes.js"); // Adjust if path differs
+const serviceRoutes = require("./routes/ServiceRoutes.js") 
+const configRoutes = require("./routes/configRoutes.js");
 const imageRoutes = require("./routes/images.js"); 
 const textRoutes = require("./routes/textRoutes.js") 
 const idRoutes = require("./routes/idRoutes.js") 
@@ -27,6 +28,7 @@ app.use(cors({
   allowedHeaders: ["Content-Type"]
 }));
 
+app.use("/IntegrityAuto/services", serviceRoutes);
 app.use("/IntegrityAuto/config", configRoutes);
 app.use("/IntegrityAuto/images", imageRoutes);
 app.use("/IntegrityAuto/text", textRoutes);

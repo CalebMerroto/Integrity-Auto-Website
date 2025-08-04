@@ -267,16 +267,107 @@ export async function idExists(id) {
     // Defensive: result may be null
     return result?.exists ?? false;
 }
-
 export async function clearIDs() {
     return apiCall({
         url:`/id/clear`,
-        method: "POST",
+        req: {
+            method: "POST"
+        },
         messages: {
-            start: `[getNextId] clearing IDs`,
-            failed: `[getNextId] could not clear IDs`,
-            success: `[getText] IDs Cleared:`,
-            error: `[getText] Error clearing IDs`
+            start: `[clearIDs] clearing IDs`,
+            failed: `[clearIDs] could not clear IDs`,
+            success: `[clearIDs] IDs Cleared:`,
+            error: `[clearIDs] Error clearing IDs`
         }
     })
+}
+
+// Service related calls
+export async function getServicesForDay(dayStr) {
+    return apiCall({
+        url: `services/all/onDay/${dayStr}`,
+        req: { method: "GET" },
+        messages: {
+            start: `[getServicesForDay] Getting services for ${dayStr}`,
+            failed: `[getServicesForDay] Failed to get services`,
+            success: `[getServicesForDay] Services fetched:`,
+            error: `[getServicesForDay] Error fetching services for ${dayStr}`
+        }
+    });
+}
+export async function checkAvailability(dayStr) {
+    return apiCall({
+        url: `services/availability/${dayStr}`,
+        req: { method: "GET" },
+        messages: {
+            start: `[checkAvailability] Checking availability for ${dayStr}`,
+            failed: `[checkAvailability] Failed to check availability`,
+            success: `[checkAvailability] Availability status received:`,
+            error: `[checkAvailability] Error checking availability for ${dayStr}`
+        }
+    });
+}
+export async function createService(dayStr, serviceData) {
+    return apiCall({
+        url: `services/new/onDay/${dayStr}`,
+        req: {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(serviceData)
+        },
+        messages: {
+            start: `[createService] Creating service for ${dayStr}`,
+            failed: `[createService] Failed to create service`,
+            success: `[createService] Service created:`,
+            error: `[createService] Error creating service for ${dayStr}`
+        }
+    });
+}
+export async function markServiceComplete(license, dayStr) {
+    return apiCall({
+        url: `services/complete/${license}/${dayStr}`,
+        req: { method: "POST" },
+        messages: {
+            start: `[markServiceComplete] Marking ${license} as complete on ${dayStr}`,
+            failed: `[markServiceComplete] Failed to mark complete`,
+            success: `[markServiceComplete] Service marked complete`,
+            error: `[markServiceComplete] Error marking service complete`
+        }
+    });
+}
+export async function rescheduleService(license, newDayStr) {
+    return apiCall({
+        url: `services/reschedule/${license}/${newDayStr}`,
+        req: { method: "PUT" },
+        messages: {
+            start: `[rescheduleService] Rescheduling ${license} to ${newDayStr}`,
+            failed: `[rescheduleService] Failed to reschedule service`,
+            success: `[rescheduleService] Service rescheduled:`,
+            error: `[rescheduleService] Error rescheduling service`
+        }
+    });
+}
+export async function cancelService(license, dayStr) {
+    return apiCall({
+        url: `services/cancel/${license}/${dayStr}`,
+        req: { method: "POST" },
+        messages: {
+            start: `[cancelService] Cancelling service for ${license} on ${dayStr}`,
+            failed: `[cancelService] Failed to cancel service`,
+            success: `[cancelService] Service cancelled`,
+            error: `[cancelService] Error cancelling service`
+        }
+    });
+}
+export async function overrideFullStatus(dayStr) {
+    return apiCall({
+        url: `services/override/fullStatus/${dayStr}`,
+        req: { method: "PUT" },
+        messages: {
+            start: `[overrideFullStatus] Overriding full status for ${dayStr}`,
+            failed: `[overrideFullStatus] Failed to override full status`,
+            success: `[overrideFullStatus] Full status overridden`,
+            error: `[overrideFullStatus] Error overriding full status`
+        }
+    });
 }
